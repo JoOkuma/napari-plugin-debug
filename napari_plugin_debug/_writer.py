@@ -7,6 +7,7 @@ see: https://napari.org/docs/dev/plugins/hook_specifications.html
 Replace code below according to your needs
 """
 
+from typing import Any, Dict, Optional
 from napari_plugin_engine import napari_hook_implementation
 
 
@@ -18,3 +19,12 @@ def napari_get_writer():
 @napari_hook_implementation
 def napari_write_image():
     pass
+
+
+@napari_hook_implementation
+def napari_write_tracks(path: str, data: Any, meta: Dict) -> str:
+    with open(path, mode='w') as f:
+        for row in data:
+            row = [str(elem) for elem in row]
+            f.write(','.join(row) + '\n')
+    return path
